@@ -1,0 +1,50 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% block body_block %}
+<div class="wrapper">
+  {% if registered %}
+    <div class="alert alert-success">
+      <h1>Thank You For Registering</h1>
+    </div>
+  {% else %}
+  <div class="col-md-8 mx-auto text-center">
+    <h5>{% bootstrap_messages %}</h5>
+    {% if user_form.errors %}
+
+       {% for error in user_form.non_field_errors %}
+           <div class="alert alert-danger">
+               <strong>{{ error|escape }}</strong>
+           </div>
+       {% endfor %}
+   {% endif %}
+  </div>
+    <div class="col-md-4 mx-auto">
+      {% if user.is_authenticated %}
+        <p class="lead text-center">
+          <a href="{% url 'booking:logout' %}">Logout</a> first to Register
+        </p>
+      {% else %}
+      <h3 class="title text-center">Register</h3>
+        <form class="" action="{% url 'booking:register' %}" enctype="multipart/form-data"  method="post">
+          {% csrf_token %}
+          <div class="form-row">
+              {% bootstrap_form profile_form form_group_class='form-row mb-2' label_class='text-uppercase col-md-4' field_class='col-md-8' %}
+          </div>
+          {% for field in user_form %}
+            {% bootstrap_field field form_group_class='form-row mb-2' label_class='  col-md-4' field_class='col-md-8' size='small' %}
+          {% endfor %}
+          <div class="form-group ">
+            <input class="btn btn-info form-control" type="submit" name="" value="Register">
+          </div>
+          <div class="form-group">
+            <p class="text-center">Already have an account? <a href="{% url 'booking:login'%}">Login</a> </p>
+          </div>
+
+        </form>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

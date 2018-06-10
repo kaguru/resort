@@ -1,0 +1,192 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div id="new-booking" class="wrapper mx-auto">
+ <div class="container">
+
+   <div class="col-md-9 text-center">
+     {% bootstrap_messages %}
+
+     {% if hotel_guest_formset.non_form_errors %}
+       {% for error in hotel_guest_formset.non_form_errors %}
+         {% bootstrap_alert error alert_type='warning'  %}
+       {% endfor %}
+     {% endif %}
+     {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          {% bootstrap_alert error alert_type='warning' %}
+        {% endfor %}
+    {% endif %}
+   </div>
+    <div>
+       <h5 class="title">New Booking</h5>
+    </div>
+   <form id="booking-form" action="{% url 'booking:booking-create' %}" method="POST" enctype="multipart/form-data">
+     {% csrf_token %}
+    {{ hotel_guest_formset.management_form }}
+      <div id="guestDetailWrap" >
+        {% for form in hotel_guest_formset %}
+        <div class="form-row guest-wrap">
+          {% for field in form %}
+            {% bootstrap_field field form_group_class='form-group col-md-3' show_label=False %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+
+   <div class="form-row">
+
+     {% for field in new_booking_form %}
+       {% bootstrap_field field form_group_class='form-group col-md-3' exclude='room' show_label=True %}
+     {% endfor %}
+
+   </div>
+
+    <div class="form-row col-md-6 p-0">
+      <div class="form-group col-md-4">
+        <label for="capacity">Guests:</label>
+        <!--<input class="room_js_change" id=" id="capacity"" type="text" name="capacity" >-->
+        <select id="capacity"  class="form-control form-control-sm" name="capacity">
+        </select>
+      </div>
+      <div class="form-group book-room-standard col-md-4" style="display:none;">
+        <label  for="room_standard_select">Room Standard:</label>
+        <select class="form-control form-control-sm" id="room_standard_select" >
+        </select>
+      </div>
+      <div class="form-group book-room-name col-md-4" style="display:none;">
+        <label for="room_name">Room:</label>
+        <select class="form-control form-control-sm" id="room_name" name="{{new_booking_form.room.name}}" >
+        </select>
+      </div>
+    </div>
+
+ <div class="form-row">
+   <div class="form-group col-md-3">
+     <button type="submit" class="btn btn-success mt-1">Reserve Booking</button>
+   </div>
+ </div>
+
+ </form>
+
+ </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+
+  function range(start, end){
+    var myArray = [];
+    for (var i=start; i<=end; i += 1){
+      myArray.push(i)
+    }
+    return myArray;
+  }
+  var capacity_range = range(0,3)
+  console.log(capacity_range)
+  $('#capacity').empty();
+    $.each(capacity_range, function(index,value){
+      $('#capacity').append("<option value='"+value+"' >"+value+"</options>");
+    });
+
+  $('.book-room-standard').hide();
+  $('.book-room-name').hide();
+  $(".ppp").hide();
+
+  $('#capacity').change(function(){
+    capacity_value = $(this).val()
+
+    if (capacity_value==0){
+      $('.book-room-standard').hide();
+      $('.book-room-name').hide();
+    }
+    else{
+      $('.book-room-standard').show();
+      $('.book-room-name').show();
+    var form = $(this).closest("form");
+
+    $.ajax({
+      url: '{% url "booking:vacant-rooms-filter" %}?capacity='+capacity_value,
+      data: form.serialize(),
+      dataType: 'json',
+      success: function(data){
+        /*console.log(data.results);*/
+        queryset = data.results
+        console.log(queryset)
+
+        if(queryset){
+
+          // populate room standards
+          var room_std_array = []
+          $('#room_standard_select').empty();
+          $.each(queryset, function(index,value){
+            var std_value = value['room_standard__name'];
+            var std_id = value['room_standard__id'];
+
+              if ($.inArray(std_value, room_std_array) != -1){
+                return
+              }else{
+                $('#room_standard_select').append("<option value='"+std_id+"' >"+std_value+"</options>");
+              }
+              room_std_array.push(std_value);
+          });
+          // console.log(room_std_array);
+          // populate room names
+          $('#room_name').empty();
+          var room_name_array = []
+          $.each(queryset, function(index,value){
+              first_room_std_id = queryset[0]['room_standard__id']
+              // console.log(index+" --- "+value['room_standard__name']);
+              instance_room_std_id = value['room_standard__id']
+              instance_room_id = value['id']
+              instance_room_name = value['name']
+
+              if (instance_room_std_id == first_room_std_id){
+                room_name_array.push({
+                    id: instance_room_id,
+                    name: instance_room_name,
+                })
+              }
+          });
+          // console.log(room_name_array)
+        $('#room_name').empty();
+          $.each(room_name_array, function(index,value){
+            $('#room_name').append("<option value='"+value['id']+"' >"+value['name']+"</options>");
+          });
+        }
+      }
+    });
+  }
+  });
+
+  $('#room_standard_select').change(function(){
+    var select_room_std_val = $(this).val()
+    var room_name_array = []
+
+      $.each(queryset, function(index, value){
+        // console.log(index+" --- "+value['room_standard__name']);
+        instance_room_std_id = value['room_standard__id']
+        instance_room_id = value['id']
+        instance_room_name = value['name']
+
+        if (instance_room_std_id == select_room_std_val){
+          room_name_array.push({
+              id: instance_room_id,
+              name: instance_room_name,
+          })
+        }
+      });
+      // console.log(room_name_array)
+      $('#room_name').empty();
+        $.each(room_name_array, function(index,value){
+          $('#room_name').append("<option value='"+value['id']+"' >"+value['name']+"</options>");
+        });
+    });
+
+  </script>
+{% endblock %}

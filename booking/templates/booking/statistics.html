@@ -1,0 +1,99 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div id="statisics-cont" class="wrapper">
+  <div class="container">
+    <h5 class="title">Statistics</h5>
+    <div class="text-center">
+      {% bootstrap_messages %}
+      {% if form.errors %}
+        <p>{{ form.errors }}</p>
+      {% endif %}
+    </div>
+    <div class="statistics-wrapper">
+      <div id="pie-chart"></div>
+      <hr>
+      <div id="column-chart"></div>
+    </div>
+</div>
+</div>
+
+
+<!-- High Charts Script Files -->
+<script src="{% static 'booking/js/highcharts.js' %}"></script>
+<script src="{% static 'booking/js/highcharts-3d.js' %}"></script>
+<script src="{% static 'booking/js/avocado.js' %}"></script>
+<script>
+
+    Highcharts.theme = {
+      colors: ['#F1DC1C', '#2340D9', '#D92333', '#C67C1B', '#11982F', '#B82C5A', '#6C3232', '#2CB85B',
+          '#5BB896', '#B7F61C', '#6E3BEC'],
+      chart: {
+          backgroundColor: null,
+          style: {
+              fontFamily: 'Dosis, sans-serif'
+          }
+      },
+      title: {
+          style: {
+              fontSize: '16px',
+              fontWeight: 'bold',
+              textTransform: 'uppercase'
+          }
+      },
+      tooltip: {
+          borderWidth: 0,
+          backgroundColor: 'rgba(219,219,216,0.8)',
+          shadow: false
+      },
+      legend: {
+          itemStyle: {
+              fontWeight: 'bold',
+              fontSize: '13px'
+          }
+      },
+      xAxis: {
+          gridLineWidth: 1,
+          labels: {
+              style: {
+                  fontSize: '12px'
+              }
+          }
+      },
+      yAxis: {
+          minorTickInterval: 'auto',
+          title: {
+              style: {
+                  textTransform: 'uppercase'
+              }
+          },
+          labels: {
+              style: {
+                  fontSize: '12px'
+              }
+          }
+      },
+      plotOptions: {
+          candlestick: {
+              lineColor: '#404048'
+          }
+      },
+
+
+      // General
+      background2: '#F0F0EA'
+
+    };
+
+  // Apply the theme
+  Highcharts.setOptions(Highcharts.theme);
+
+  Highcharts.chart('pie-chart', {{ pie_chart|safe }});
+  Highcharts.chart('column-chart', {{ column_chart|safe }});
+</script>
+
+{% endblock %}

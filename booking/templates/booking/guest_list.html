@@ -1,0 +1,94 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper">
+
+   <div class="mx-auto text-center">
+     <h5>{% bootstrap_messages %}</h5>
+       {% if rooms_formset.errors %}
+          {% for error in rooms_formset.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endif %}
+  </div>
+   <div class="row">
+     <div class="col-md-12">
+       <form class="col-md-3 pull-right pr-0 mb-1 mr-0" action="{% url 'booking:guest-list' %}" method="get">
+        <div class="form-row">
+          <input id="{{ search_form.name.id }}" class="col-md-7 form-control" type="text" name="{{ search_form.name.name }}" placeholder="Search..." >
+          <button class="btn btn-resort-search col-md-4 ml-0 pr-0 mr-1" type="submit">Search</button>
+        </div>
+       </form>
+     </div>
+   </div>
+   <div class="table-responsive-sm col-md-12">
+   <table class="table table-list table-hover table-sm">
+     <caption>
+       <ul>
+         <li>
+           <a class="all resort-link" href="{% url 'booking:guest-list' %}">
+             all guests
+           </a>
+         </li>
+       </ul>
+     </caption>
+
+     <thead class="thead-light">
+       <tr>
+         <th scope="col">#</th>
+         <th scope="col">Full Name</th>
+         <th scope="col">Phone Number</th>
+         <th scope="col">Email</th>
+         <th scope="col">No. Bookings</th>
+         <th scope="col">Last Booking</th>
+       </tr>
+     </thead>
+     {% if not object_list %}
+     <tbody >
+         <tr>
+           <td colspan="8" class="text-center">Sorry No Rooms Available</td>
+         </tr>
+     </tbody>
+     {% else %}
+     {% for guest in object_list %}
+
+     <tbody class="mx-auto">
+         <tr class="mr-auto">
+           <td scope="row">{{ forloop.counter }}</td>
+
+           <td>
+             {{ guest.full_name }}
+           </td>
+           <td>
+               {{ guest.phone_number }}
+           </td>
+           <td>
+             {% if guest.email %}
+               <a href="mailto:{{ guest.email }}" class="text-lowercase">{{ guest.email }}</a>
+             {% else %}
+              <small>None</small>
+             {% endif %}
+           </td>
+           <td>
+              {{ guest.total_bookings }}
+           </td>
+           <td>
+              {{ guest.processed }}
+           </td>
+         </tr>
+     </tbody>
+     {% endfor %}
+     {% endif %}
+   </table>
+ </div>
+    {% bootstrap_pagination page_obj size='small' %}
+ </div>
+</div>
+</div>
+{% endblock %}

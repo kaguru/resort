@@ -1,0 +1,125 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper col-md-12 mx-auto">
+
+   <div class="mx-auto text-center">
+     <h5>{% bootstrap_messages %}</h5>
+       {% if rooms_formset.errors %}
+          {% for error in rooms_formset.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endif %}
+  </div>
+    <div class="pl-0  mb-1 col-md-6">
+      <a class="btn btn-sm btn-primary col-md-3 mb-2" href="{% url 'booking:room-create' %}" style="border-radius:30px !important;">
+       <i class="fa fa-plus"></i>&nbsp Add Room
+      </a>
+    </div>
+   <div class="row">
+     <div class="col-md-4 mr-auto">
+       <h5 class="title">Rooms List</h5>
+     </div>
+     <div class="row col-md-6 pull-right">
+       <form class="ml-auto" action="{% url 'booking:room-list' %}" method="get">
+        <div class="form-row">
+          <input id="{{ search_form.name.id }}" class="col-md-7 form-control" type="text" name="{{ search_form.name.name }}" placeholder="Search..." >
+          <button class="btn btn-resort-search col-md-4 ml-0" type="submit">Search</button>
+        </div>
+       </form>
+     </div>
+   </div>
+   <div class="table-responsive-sm">
+   <table class="table table-list table-hover table-sm">
+     <caption>
+       <ul>
+         <li>
+           <a class="booked resort-link " href="{% url 'booking:room-status_filter' 'True' %}">
+             booked
+           </a>
+         </li>
+         <li>
+           <a class="ending resort-link " href="{% url 'booking:room-status_filter' 'ending' %}">
+             ending
+           </a>
+         </li>
+         <li>
+           <a class="vacant resort-link" href="{% url 'booking:room-status_filter' 'False' %}">
+             vacant
+           </a>
+         </li>
+       </ul>
+     </caption>
+     <thead class="thead-light">
+       <tr>
+         <th scope="col">#</th>
+         <th scope="col">Photo</th>
+         <th scope="col">Name</th>
+         <th scope="col">Room Standard</th>
+         <th scope="col">Capacity</th>
+         <th scope="col">Status</th>
+         <th scope="col">Last Booked</th>
+         <th scope="col">Book Out</th>
+         <th>&nbsp</th>
+       </tr>
+     </thead>
+     {% if not object_list %}
+     <tbody>
+         <tr>
+           <td colspan="8" class="text-center">Sorry No Rooms Available</td>
+         </tr>
+     </tbody>
+     {% else %}
+     {% for room in object_list %}
+     <tbody>
+         <tr class="mr-auto">
+           <td scope="row">{{ forloop.counter }}</td>
+           <td class="text-center">
+             {% if not room.room_image %}
+               <i class="fa fa-image" style="color:#555;"></i>
+             {% else %}
+               <a href="{{ room.room_image.url }}">
+                 <img src="{{ room.room_image.url }}" alt="rooms image" style="width:35px; height:35px; border-radius:35px;">
+               </a>
+             {% endif %}
+           </td>
+           <td>
+             <a class="resort-link" href="{% url 'booking:room-detail' room.pk %}" >{{ room.name }}</a>
+           </td>
+           <td>
+             <a href="{% url 'booking:room-room_std_filter' room.room_standard.name %}">
+               {{ room.room_standard }}
+             </a>
+           </td>
+           <td>{{ room.capacity }}</td>
+           <td>
+             <a href="{% url 'booking:room-status_filter' room.booked  %}">
+               {% if room.booked == True %}
+                   <i class="fa fa-circle" style="color:green;"></i><small class="text-lowercase"> &nbsp booked</small>
+               {% elif room.booked == 'ending' %}
+                   <i class="fa fa-circle" style="color:orange;"></i><small class="text-lowercase"> &nbsp ending</small>
+               {% elif room.booked == False %}
+                 <i class="fa fa-circle" style="color:red;"></i><small class="text-lowercase"> &nbsp vacant</small>
+               {% endif %}
+             </a>
+           </td>
+           <td>{{ room.last_booked }}</td>
+           <td>{{ room.book_out }}</td>
+           <td ><a class="special" href="{% url 'booking:room-detail' room.pk %}" >view</a></td>
+         </tr>
+     </tbody>
+     {% endfor %}
+     {% endif %}
+   </table>
+ </div>
+    {% bootstrap_pagination page_obj size='small' %}
+ </div>
+</div>
+</div>
+{% endblock %}

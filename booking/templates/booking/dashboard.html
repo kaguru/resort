@@ -1,0 +1,83 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div id="dashboard-cont" class="wrapper">
+  <div class="container">
+    <h5 class="title">DashBoard</h5>
+    <div class="text-center">
+      {% bootstrap_messages %}
+      {% if form.errors %}
+        <p>{{ form.errors }}</p>
+      {% endif %}
+    </div>
+    <div class="dashboard-wrapper">
+      <div class="card-deck">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Guests</h5>
+            <small>
+              <i class="fa fa-clock-o" aria-hidden="true"></i> Latest: {{ booked_data.latest_guest }}
+            </small>
+            <figure>
+              <img src="{% static 'booking/images/sound-waves.png' %}" alt="">
+            </figure>
+
+          </div>
+          <div class="card-footer">
+            <small class="text-muted pull-left"><span>{{ guests_count.total_guests }} </span> <br>Total Served</small>
+            <small class="text-muted pull-right"><span>{{ booked_data.active_guests }}</span> <br>Current Guests</small>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Bookings</h5>
+            <small>
+              <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp Latest: {{ booked_data.latest_booking }}
+            </small>
+            <figure>
+              <img src="{% static 'booking/images/sound-waves.png' %}" alt="">
+            </figure>
+
+          </div>
+          <div class="card-footer">
+            <small class="text-muted pull-left"><span>{{ bookings_count.total_bookings }} </span> <br>Total Bookings</small>
+            <small class="text-muted pull-right"><span>{{ booked_data.active_bookings }} </span> <br>Active Bookings</small>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Rooms</h5>
+            <small>
+              <i class="fa fa-clock-o" aria-hidden="true"></i> Latest: {{ booked_data.latest_room }}
+            </small>
+            <figure>
+              <img src="{% static 'booking/images/sound-waves.png' %}" alt="">
+            </figure>
+
+          </div>
+          <div class="card-footer">
+            <small class="text-muted pull-left"><span>{{ room_count.total_rooms }} </span> <br>Total Units</small>
+            <small class="text-muted pull-right"><span>{{ booked_data.booked_count }} </span> <br>Booked Units</small>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-12 pull-right">
+        <a class="btn btn-secondary btn-lg mt-2  col-md-3" href="{% url 'booking:guest-list' %}">View Guests</a>
+      </div>
+    </div>
+</div>
+</div>
+
+<!-- High Charts Script Files -->
+<script src="{% static 'booking/js/highcharts.js' %}"></script>
+<script src="{% static 'booking/js/highcharts-3d.js' %}"></script>
+<script src="{% static 'booking/js/avocado.js' %}"></script>
+
+{% endblock %}

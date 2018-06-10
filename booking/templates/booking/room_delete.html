@@ -1,0 +1,22 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div id="new-booking" class="wrapper">
+ <div class="container">
+   <h5 class="title text-center">Delete Booking</h5>
+    <div class="row">
+      <div class="table-responsive-sm col-md-6 mx-auto text-center">
+        <form action="" method="post">
+          {% csrf_token %}
+          <p class="lead">Are you sure you want to delete  [{{ object }}] ?</p>
+          <input class="btn btn-danger mx-auto" type="submit" value="Confirm" />
+          <a class="btn btn-secondary" href="{% url 'booking:index' %}">Cancel</a>
+        </form>
+      </div>
+    </div>
+ </div>
+</div>
+{% endblock %}

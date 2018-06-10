@@ -1,0 +1,49 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper col-md-10">
+
+   <div class="mx-auto text-center">
+     <h5>{% bootstrap_messages %}</h5>
+       {% if rooms_formset.errors %}
+          {% for error in rooms_formset.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endif %}
+  </div>
+  <a class="btn btn-sm btn-primary mb-3" href="{% url 'booking:room-list' %}" style="border-radius:30px !important;">
+   <i class="fa fa-list"></i>&nbsp Rooms List
+  </a>
+   <h5 class="title">Create Room</h5>
+   <form id="rooms-cont"  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ rooms_formset.management_form }}
+
+        <div id="rooms-wrap" class="row">
+           {% for form in rooms_formset %}
+             {% for field in form  %}
+               {% bootstrap_field field exclude='name, capacity, room_standard' form_group_class='col-md-12' %}
+               {% bootstrap_field field exclude='room_image' form_group_class='col-md-4 mb-3' %}
+
+             {% endfor %}
+
+           {% endfor %}
+
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-success mt-0">Save</button>
+          </div>
+        </div>
+
+</form>
+ </div>
+</div>
+</div>
+{% endblock %}

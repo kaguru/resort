@@ -1,0 +1,25 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+<div class="wrapper">
+  <div class="row">
+          <div class="col-md-12">
+              <div class="error-template">
+                  <h1>Oops!</h1>
+                  <h2>Error 500</h2>
+                  <div class="error-details">
+                      Sorry, A server error occured please contact the
+                      <a href="mailto:info@example.com">administator</a>
+                  </div>
+                  <div class="error-actions">
+                      <a href="{% url 'booking:index' %}" class="btn btn-primary btn-lg"><span class="fa fa-home"></span>
+                          Take Me Home
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+</div>
+{% endblock %}

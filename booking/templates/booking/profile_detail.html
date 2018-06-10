@@ -1,0 +1,88 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+{% load bootstrap4 %}
+<!--=============================================>>>>>
+= Wrapper =
+===============================================>>>>-->
+
+  <div class="wrapper">
+    <div class="container profile-detail">
+      <div class="row">
+        <div class="col-md-4 mx-auto">
+          <h5 class="title text-center">Profile Detail</h5>
+          {% if object.userprofile.profile_pic %}
+          <div class="text-center">
+            <a href="{{ object.userprofile.profile_pic.url }}">
+              <img src="{{ object.userprofile.profile_pic.url }}" alt="profile picture" style="width:80px; height:80px; border-radius:80px;">
+            </a>
+          </div>
+          {% else %}
+            <span class="username icon-header"></span>
+          {% endif %}
+          <hr>
+          
+          <div class="table-responsive-sm">
+            <table class="table table-sm">
+              <tbody>
+                <tr>
+                  <th class="col-md-5">Username: </th>
+                  <td class="col-md-7">
+                    {% if object.username %}
+                      {{object.username}}
+                    {% else %}
+                      <small>None</small>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-md-5">First name: </th>
+                  <td class="col-md-7">
+                    {% if object.first_name %}
+                      {{object.first_name}}
+                    {% else %}
+                      <small>None</small>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-md-5">Last name: </th>
+                  <td class="col-md-7">
+                    {% if object.last_name %}
+                      {{object.last_name}}
+                    {% else %}
+                      <small>None</small>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-md-5">Email: </th>
+                  <td class="col-md-7">
+                    {% if object.email %}
+                      {{object.email}}
+                    {% else %}
+                      <small>None</small>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  {% ifequal object.pk  user.pk %}
+                    <td colspan="2">
+                      <a class="btn btn-warning mt-2 form-control" href="{% url 'booking:profile-edit' object.pk %}">Edit</a>
+                    </td>
+                  {% endifequal %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--= End of Wrapper =*/-->
+<!--=============================================<<<<<-->
+
+
+{% endblock %}

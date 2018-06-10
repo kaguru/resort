@@ -1,0 +1,80 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper">
+   <div class="text-center">
+     {% bootstrap_messages %}
+   </div>
+ <div class="container">
+   <div class="pl-0  mb-1 col-md-6">
+     <a class="btn btn-sm btn-primary col-md-3 mb-2" href="{% url 'booking:booking-create' %}" style="border-radius:30px !important;">
+      <i class="fa fa-plus"></i>&nbsp New Booking
+     </a>
+   </div>
+  <div class="row">
+    <div class="col-md-4 mr-auto">
+      <h5 class="title">Bookings List</h5>
+    </div>
+    <div class="row col-md-6 pull-right">
+      <form class="ml-auto" action="{% url 'booking:booking-list' %}" method="get">
+       <div class="form-row">
+         <input id="{{ search_form.name.id }}" class="col-md-7 form-control" type="text" name="{{ search_form.name.name }}" placeholder="Search..." >
+         <button class="btn btn-resort-search col-md-4 ml-0" type="submit">Search</button>
+       </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-responsive-sm">
+    <table class="table table-list table-hover table-sm">
+      <caption>
+        <ul>
+          <li>
+            <a class="all resort-link" href="{% url 'booking:booking-list' %}">
+              all bookings
+            </a>
+          </li>
+        </ul>
+      </caption>
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Room</th>
+          <th scope="col">Check In</th>
+          <th scope="col">Check Out</th>
+          <th scope="col">Receptionist</th>
+          <th scope="col">Processed</th>
+          <th>&nbsp</th>
+        </tr>
+      </thead>
+      {% if not object_list %}
+      <tbody>
+          <tr>
+            <td colspan="6" class="text-center">Sorry No Bookings Available</td>
+          </tr>
+      </tbody>
+      {% else %}
+      {% for booking in object_list %}
+      <tbody>
+          <tr class="mr-auto">
+            <td scope="row">{{ forloop.counter }}</td>
+            <td><a href="{{ booking.room.get_absolute_url }}">{{ booking.room }}</a></td>
+            <td>{{ booking.check_in }}</td>
+            <td>{{ booking.check_out }}</td>
+            <td>
+              <a href="{% url 'booking:profile-detail' booking.receptionist.pk %}">{{ booking.receptionist }}</a>
+            </td>
+            <td>{{ booking.processed }}</td>
+            <td><a class="special" href="{% url 'booking:booking-detail' booking.pk %}" >view</a></td>
+          </tr>
+      </tbody>
+      {% endfor %}
+      {% endif %}
+    </table>
+    {% bootstrap_pagination page_obj size='small' %}
+  </div>
+ </div>
+</div>
+{% endblock %}

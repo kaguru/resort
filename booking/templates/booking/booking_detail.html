@@ -1,0 +1,46 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div id="new-booking" class="wrapper">
+ <div class="container">
+   <h5 class="title text-center">Booking Details</h5>
+    <div class="row">
+      <div class="table-responsive-sm col-md-6 mx-auto">
+        <table class="table table-detail table-bordered">
+          <tbody class="tbody">
+            <tr>
+              <th>Room</th>
+              <td><a href="{{ object.room.get_absolute_url }}">{{ object.room }}</a></td>
+            </tr>
+            <tr>
+              <th>Check In</th>
+              <td>{{ object.check_in }}</td>
+            </tr>
+            <tr>
+              <th>Check Out</th>
+              <td>{{ object.check_out }}</td>
+            </tr>
+            <tr>
+              <th>Receptionist</th>
+              <td>
+                <a href="{{ object.receptionist.get_absolute_url }}">{{ object.receptionist.user.k }}</a>
+              </td>
+            </tr>
+            <tr>
+              <th>Processed</th>
+              <td>{{ object.processed }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="">
+          <a class="btn btn-warning" href="#">Edit</a>
+          <a class="btn btn-danger" href="{% url 'booking:booking-delete' object.pk %}">Delete Booking</a>
+        </div>
+      </div>
+    </div>
+ </div>
+</div>
+{% endblock %}

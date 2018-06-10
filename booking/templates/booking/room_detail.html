@@ -1,0 +1,74 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper">
+ <div class="container">
+   <h5 class="title text-center">Room Details</h5>
+    <div class="row">
+      <div class="table-responsive-sm col-md-5 mx-auto">
+        <div class="text-center">
+          {% if not room.room_image %}
+            <i class="fa fa-image" style="color:#555;"></i>
+          {% else %}
+            <a href="{{ room.room_image.url }}">
+              <img src="{{ room.room_image.url }}" alt="rooms image" style="width:310px; height:140px; margin-bottom:5px;">
+            </a>
+          {% endif %}
+        </div>
+        <div class="table-responsive-sm">
+        <table class="table table-sm table-bordered table-detail">
+          <tbody class="tbody">
+
+            <tr>
+              <th>Name</th>
+              <td>{{ object.name }}</td>
+            </tr>
+            <tr>
+              <th>Room Standard</th>
+              <td>
+                <a href="{% url 'booking:room-room_std_filter' room.room_standard.name %}">
+                  {{ room.room_standard }}
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Capacity</th>
+              <td>{{ object.capacity }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>
+                <a href="{% url 'booking:room-status_filter' room.booked  %}">
+                  {% if room.booked == True %}
+                      <i class="fa fa-circle" style="color:green;"></i><small class="text-lowercase"> &nbsp booked</small>
+                  {% elif room.booked == 'ending' %}
+                      <i class="fa fa-circle" style="color:orange;"></i><small class="text-lowercase"> &nbsp ending</small>
+                  {% elif room.booked == False %}
+                    <i class="fa fa-circle" style="color:red;"></i><small class="text-lowercase"> &nbsp vacant</small>
+                  {% endif %}
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th>Last Booked</th>
+              <td>{{ object.last_booked }}</td>
+            </tr>
+            <tr>
+              <th>Book Out</th>
+              <td>{{ object.book_out }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        <div class="">
+          <a class="btn btn-warning" href="{% url 'booking:room-edit' object.pk %}">Edit</a>
+          <a class="btn btn-danger" href="{% url 'booking:room-delete' object.pk %}">Delete</a>
+        </div>
+      </div>
+    </div>
+ </div>
+</div>
+{% endblock %}

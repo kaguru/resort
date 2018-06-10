@@ -1,0 +1,53 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+{% load bootstrap4 %}
+<!--=============================================>>>>>
+= Wrapper =
+===============================================>>>>-->
+
+  <div class="wrapper">
+    <div class="container profile-update">
+      <div class="row">
+        <div class="col-md-4 mx-auto">
+          <h5 class="title text-center">Edit Profile</h5>
+          {% ifequal form.email.value  user.email %}
+          {% if user.userprofile.profile_pic %}
+          <div class="text-center">
+            <a href="{{ user.userprofile.profile_pic.url }}">
+              <img src="{{ user.userprofile.profile_pic.url }}" alt="profile picture" style="width:80px; height:80px; border-radius:80px;">
+            </a>
+          </div>
+          {% else %}
+            <span class="username icon-header"></span>
+          {% endif %}
+          <hr>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row mb-1">
+              <label for="{{ profile_form.profile_pic.id_for_label }}" class="col-md-4">Photo</label>
+              <input id="{{ profile_form.profile_pic.id_for_label }}" class="col-md-8" type="file" name="{{ profile_form.profile_pic.name }}" value="">
+            </div>
+            {% for field in form %}
+              {% bootstrap_field field form_group_class='form-row' label_class='col-md-4' field_class='col-md-8' %}
+            {% endfor %}
+            <div class="form-row">
+              <input type="submit" id="profile-last-name" class="btn btn-success mt-2 form-control" value="Update"></input>
+            </div>
+          </form>
+          {% else %}
+          <div class="alert alert-warning" role="alert">
+            <strong>Permissions Denied! </strong> You Don't have permissions to edit this profile.
+          </div>
+          {% endifequal %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--= End of Wrapper =*/-->
+<!--=============================================<<<<<-->
+
+
+{% endblock %}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resort</title>
+    <meta name="description" content="DESCRIPTION">
+    <!-- Core Scripts  -->
+
+  <link rel="stylesheet" href="{% static 'booking/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'booking/css/bootstrap.css' %}">
+
+  <!-- Date Picker  -->
+ <link href="{% static 'booking/css/datepicker.min.css' %}" rel="stylesheet" type="text/css">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'booking/images/icons/logo.png' %}" />
+
+  <!-- Font Faces -->
+  <style media="screen">
+      @font-face {
+        font-family: 'Open Sans';
+        src: url("{% static 'booking/fonts/Open_Sans/OpenSans-Regular.ttf' %}");
+      }
+
+      @font-face {
+        font-family: 'Lato Regular';
+        src: url("{% static 'booking/fonts/Lato/Lato-Regular.ttf' %}");
+      }
+
+  </style>
+
+  <!-- Main Site Style  -->
+  <link rel="stylesheet" href="{% static 'booking/css/site.css' %}">
+  <!-- Extra Site Style  -->
+  <link rel="stylesheet" href="{% static 'booking/css/extra.css' %}">
+
+  {% block styles %}{% endblock %}
+</head>
+
+<body>
+
+<div id="oak-container" class="container">
+<!--=============================================>>>>>
+= NAVBAR SECTION =
+===============================================>>>>-->
+<header id="oak-navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-faded fixed-top">
+    <div class="container">
+
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon bg-light"></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking:dashboard' %}">
+                <span class="dashboard icon-header"></span>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking:booking-create' %}">
+                <span class="new-booking icon-header"></span>
+                <span>New Booking</span>
+                </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking:booking-list' %}">
+                <span class="bookings icon-header"></span>
+                <span>Bookings</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking:room-list' %}">
+                <span class="units icon-header"></span>
+                <span>Rooms</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  style=" cursor: not-allowed;">
+                <span class="rates icon-header"></span>
+                <span>Rates</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking:statistics' %}">
+                <span class="statistics icon-header"></span>
+                <span>Statistics</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  style=" cursor: not-allowed;">
+                <span class="settings icon-header"></span>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              {% if user.is_authenticated %}
+                <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {% if user.userprofile.profile_pic %}
+                  <span class="icon-header">
+                    <img src="{{ user.userprofile.profile_pic.url }}" alt="profile picture" style="width:40px; height:40px; border-radius:40px;">
+                  </span>
+                  {% else %}
+                    <span class="username icon-header"></span>
+                  {% endif %}
+                  <span>{{ user.username }}</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+                  <a class="dropdown-item" href="{% url 'booking:profile-detail' user.pk %}">Profile</a>
+                  <a class="dropdown-item" href="{% url 'password_reset' %}">Change Password</a>
+           <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'booking:logout' %}">Logout</a>
+                </div>
+              {% else %}
+              <a class="nav-link profile" href="{% url 'booking:login' %}">
+                <span class="username icon-header"></span>
+                <span>Login</span>
+              </a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+
+    </div>
+  </nav>
+</header>
+
+
+<!--= End of NAVBAR SECTION =*/-->
+<!--=============================================<<<<<-->
+
+  {% block body_block %}{% endblock %}
+
+</div>
+
+  <script src="{% static 'booking/js/jquery.min.js' %}"></script>
+   <script src="{% static 'booking/js/popper.min.js' %}"></script>
+   <script src="{% static 'booking/js/bootstrap.min.js' %}"></script>
+   <!-- Date Picker -->
+   <script src="{% static 'booking/js/datepicker.min.js' %}"></script>
+   <!-- Include English language -->
+   <script src="{% static 'booking/js/i18n/datepicker.en.js' %}"></script>
+    <!-- Formset Dynamic Add and Remove Forms -->
+    <script src="{% static 'booking/js/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#booking-form #guestDetailWrap .guest-wrap').formset({
+            addText: 'Add Guest',
+            deleteText: '',
+             prefix: '{{ hotel_guest_formset.prefix }}',
+        });
+        $('#rooms-cont #rooms-wrap').formset({
+            addText: 'Add More',
+            deleteText: 'remove',
+             prefix: '{{ rooms_formset.prefix }}',
+        });
+        $('#rates-wrap').formset({
+            addText: 'Add Rate',
+            deleteText: 'remove',
+             prefix: '{{ rates_model_formset.prefix }}',
+        });
+    });
+  </script>
+  <!-- Clipboard JS -->
+  <script src="{% static 'booking/js/clipboard.js' %}"></script>
+   <!-- Site JS -->
+   <script src="{% static 'booking/js/bundle.js' %}"></script>
+   <!-- Site JS -->
+   <script src="{% static 'booking/js/extra.js' %}"></script>
+
+   {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+{% extends "booking/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper">
+ <div class="container">
+   <h5 class="title text-center">Room Edit</h5>
+    <div class="row">
+      <div class="table-responsive-sm col-md-4 mx-auto">
+        <div class="text-center">
+          {% if not room.room_image %}
+            <i class="fa fa-image" style="color:#555;"></i>
+          {% else %}
+            <a href="{{ room.room_image.url }}">
+              <img src="{{ room.room_image.url }}" alt="rooms image" style="width:330px; height:140px; margin-bottom:5px;">
+            </a>
+          {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row mb-1">
+              <label for="{{ form.room_image.id_for_label }}" class="col-md-4">Photo</label>
+              <input id="{{ form.room_image.id_for_label }}" class="col-md-8" type="file" name="{{ form.room_image.name }}" value="">
+            </div>
+            {% for field in form %}
+              {% bootstrap_field field form_group_class='form-row mb-1' label_class='col-md-4' field_class='col-md-8' exclude='room_image' %}
+            {% endfor %}
+          <div class="form-row">
+            <input type="submit" id="profile-last-name" class="btn btn-success mt-2 form-control" value="Update"></input>
+          </div>
+        </form>
+      </div>
+    </div>
+ </div>
+</div>
+{% endblock %}
