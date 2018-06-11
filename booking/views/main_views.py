@@ -404,3 +404,17 @@ def handler404(request):
 
 def handler500(request):
     return render(request, 'booking/500.html')
+
+class RoomStandardCreateView(LoginRequiredMixin, django_generic_views.CreateView):
+    model = booking_models.RoomStandard
+    fields = ('name',)
+    template_name = 'booking/room_standard_create.html'
+
+    def get_success_url(self):
+        return reverse('booking:room-list')
+
+# Delete Booking
+class RoomStandardDeleteView(LoginRequiredMixin, django_edit_views.DeleteView):
+    model = booking_models.RoomStandard
+    template_name = 'booking/delete.html'
+    success_url = reverse_lazy('booking:room-list')

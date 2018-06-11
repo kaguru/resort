@@ -1,0 +1,36 @@
+{% extends "booking/base.html" %}
+
+{% load staticfiles %}
+{% block body_block %}
+
+{% load bootstrap4 %}
+
+<div class="wrapper col-md-10">
+
+   <div class="mx-auto text-center">
+     <h5>{% bootstrap_messages %}</h5>
+       {% if form.errors %}
+          {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endif %}
+  </div>
+
+   <h5 class="title">Create Room Standard</h5>
+   <form id="room-standard-cont"  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+        {% for field in form  %}
+          {% bootstrap_field field form_group_class='col-md-4' %}
+        {% endfor %}
+
+          <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-success mt-1">Save</button>
+          </div>
+
+</form>
+ </div>
+</div>
+</div>
+{% endblock %}

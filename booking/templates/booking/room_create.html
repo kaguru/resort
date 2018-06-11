@@ -24,14 +24,18 @@
    <form id="rooms-cont"  method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ rooms_formset.management_form }}
+        <div class="col-md-12">
+          <a class="pull-right text-secondary" href="{% url 'booking:room-standard-create' %}">add room standard</a>
+        </div>
+        <div id="rooms-wrap" class="col-md-12 row">
 
-        <div id="rooms-wrap" class="row">
            {% for form in rooms_formset %}
              {% for field in form  %}
                {% bootstrap_field field exclude='name, capacity, room_standard' form_group_class='col-md-12' %}
                {% bootstrap_field field exclude='room_image' form_group_class='col-md-4 mb-3' %}
 
              {% endfor %}
+
 
            {% endfor %}
 
