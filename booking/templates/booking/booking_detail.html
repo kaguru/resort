@@ -26,7 +26,7 @@
             <tr>
               <th>Receptionist</th>
               <td>
-                <a href="{{ object.receptionist.get_absolute_url }}">{{ object.receptionist.user.k }}</a>
+                <a href="{% url 'booking:profile-detail' booking.receptionist.pk %}">{{ booking.receptionist }}</a>
               </td>
             </tr>
             <tr>
@@ -36,7 +36,7 @@
           </tbody>
         </table>
         <div class="">
-          <a class="btn btn-warning" href="#">Edit</a>
+          <button type="button" class="btn btn-warning" href="#" disabled>Edit</button>
           <a class="btn btn-danger" href="{% url 'booking:booking-delete' object.pk %}">Delete Booking</a>
         </div>
       </div>
