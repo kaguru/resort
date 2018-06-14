@@ -1,6 +1,6 @@
 Django booking application 
 
-Assuming you have created and activated a python virtual environment, if not [check](https://docs.python.org/3/tutorial/venv.html) here
+Assuming you have created and activated a python virtual environment, if not check [here](https://docs.python.org/3/tutorial/venv.html) 
 
 Installation:
 ```
